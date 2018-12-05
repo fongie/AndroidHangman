@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Hangman</string>
+    <string name="welcome">Welcome to Hangman!</string>
+    <string name="rules">You will be given a random word to guess. If you write one letter, you guess at a letter and will see whether it exists in the word or not and at what location.\\n If you write more than one letter, you are guessing the whole word.\\nIf you win or lose a round, your score is adjusted and the next round starts immediately.\\nGood luck!</string>
+    <string name="button_start">Start</string>
+    <string name="score_string">Your current score is </string>
+    <string name="remaining_attempts_string_start">You have</string>
+    <string name="remaining_attempts_string_end">attempts remaining</string>
+    <string name="remaining_attempts_string_placeholder">Waiting for game to start..</string>
+    <string name="empty_word">_ _ _ _</string>
+    <string name="input_hint">Letter or Word</string>
+</resources>
