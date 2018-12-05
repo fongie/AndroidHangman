@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +33,6 @@ public class CurrentGameFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View v) {
-        Log.e("set", "CLICKED GUESS");
         if (guessInput.getText().toString().length() < 1) {
             return;
         }

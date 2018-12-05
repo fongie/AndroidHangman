@@ -1,8 +1,6 @@
 package se.kth.korlinge.androidhangman.repository;
 
 import android.arch.lifecycle.MutableLiveData;
-import android.util.Log;
-
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,8 +18,6 @@ public class GameRepository  extends Thread {
     private final MutableLiveData<String> word;
     private Connection conn;
 
-    private boolean running = true;
-
     public GameRepository(MutableLiveData<Integer> score, MutableLiveData<Integer> remainingAttempts, MutableLiveData<String> word) {
         this.score = score;
         this.remainingAttempts = remainingAttempts;
@@ -34,24 +30,7 @@ public class GameRepository  extends Thread {
             updateViewModel(reply);
         });
     }
-
-    private void updateViewModel(StatusReport statusReport) {
-        score.postValue(statusReport.getScore());
-        remainingAttempts.postValue(statusReport.getRemainingAttempts());
-        formatAndSetWord(statusReport);
-    }
-
     public void start() {
-        /*
-        Log.e("set", "HELLO FROM GAMEREPO RUN THREAD ");
-        while (running) {
-            if (conn == null) {
-                conn = new Connection();
-                StatusReport report = conn.start();
-                updateViewModel(report);
-            }
-        }
-        */
         CompletableFuture.runAsync(() -> {
             if (conn == null) {
                 conn = new Connection();
@@ -59,6 +38,11 @@ public class GameRepository  extends Thread {
                 updateViewModel(report);
             }
         });
+    }
+    private void updateViewModel(StatusReport statusReport) {
+        score.postValue(statusReport.getScore());
+        remainingAttempts.postValue(statusReport.getRemainingAttempts());
+        formatAndSetWord(statusReport);
     }
     private void formatAndSetWord(StatusReport statusReport) {
         StringBuilder word = new StringBuilder();

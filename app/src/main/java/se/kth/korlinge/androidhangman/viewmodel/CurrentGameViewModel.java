@@ -4,8 +4,6 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
 
-import java.util.concurrent.CompletableFuture;
-
 import DTO.Guess;
 import se.kth.korlinge.androidhangman.repository.GameRepository;
 

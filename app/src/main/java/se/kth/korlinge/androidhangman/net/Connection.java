@@ -37,7 +37,6 @@ public class Connection {
          socket.setSoTimeout(HALF_HOUR);
          send = new ObjectOutputStream(socket.getOutputStream());
          receive = new ObjectInputStream(socket.getInputStream());
-         Log.e("set", "HELLO FROM CONNECTION");
       } catch (IOException e) {
          e.printStackTrace();
          System.err.println("Could not connect to server.");
