@@ -1,11 +1,19 @@
 package se.kth.korlinge.androidhangman.viewmodel;
 
-import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import se.kth.korlinge.androidhangman.DTO.LetterPosition;
-import se.kth.korlinge.androidhangman.DTO.StatusReport;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
+import DTO.Guess;
+import DTO.LetterPosition;
+import DTO.StatusReport;
+import se.kth.korlinge.androidhangman.net.Connection;
 import se.kth.korlinge.androidhangman.repository.GameRepository;
+import se.kth.korlinge.androidhangman.repository.InfoSetter;
 
 /**
  * Provides data for the UI component "CurrentGameFragment"
@@ -13,20 +21,31 @@ import se.kth.korlinge.androidhangman.repository.GameRepository;
 public class CurrentGameViewModel extends ViewModel {
     private final MutableLiveData<Integer> score = new MutableLiveData<>();
     private final MutableLiveData<Integer> remainingAttempts = new MutableLiveData<>();
-    private final MutableLiveData<String> word = new MutableLiveData<>();
+    private final  MutableLiveData<String> word = new MutableLiveData<>();
     private GameRepository gameRepository;
+    private Connection conn;
 
     public void init() {
-        System.out.println("INITIATING VIEWMODEL");
+        Log.e("set", "HELLO FROM VIEWMODEL INIT");
+        gameRepository = new GameRepository(getScore(), getRemainingAttempts(), getWord());
+        Thread thread = new Thread(gameRepository);
+        thread.start();
 
+    }
 
-        gameRepository = new GameRepository();
-        StatusReport statusReport = gameRepository.startGame();
+    public MutableLiveData<Integer> getScore() {
+        return score;
+    }
 
-        score.setValue(statusReport.getScore());
-        remainingAttempts.setValue(statusReport.getRemainingAttempts());
+    public MutableLiveData<Integer> getRemainingAttempts() {
+        return remainingAttempts;
+    }
 
+    public MutableLiveData<String> getWord() {
+        return word;
+    }
 
+    private void formatAndSetWord(StatusReport statusReport) {
         StringBuilder word = new StringBuilder();
         for (int i = 0; i < statusReport.getWordLength(); i++) {
             word.append("_");
@@ -41,15 +60,5 @@ public class CurrentGameViewModel extends ViewModel {
         this.word.setValue(word.toString());
     }
 
-    public LiveData<Integer> getScore() {
-        return score;
-    }
 
-    public LiveData<Integer> getRemainingAttempts() {
-        return remainingAttempts;
-    }
-
-    public LiveData<String> getWord() {
-        return word;
-    }
 }

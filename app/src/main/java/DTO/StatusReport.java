@@ -1,6 +1,4 @@
-package se.kth.korlinge.androidhangman.DTO;
-
-import android.arch.lifecycle.LiveData;
+package DTO;
 
 import java.io.Serializable;
 import java.util.ArrayList;

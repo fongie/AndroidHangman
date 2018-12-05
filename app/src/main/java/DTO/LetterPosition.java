@@ -1,4 +1,4 @@
-package se.kth.korlinge.androidhangman.DTO;
+package DTO;
 
 import java.io.Serializable;
 
