@@ -3,9 +3,10 @@ package se.kth.korlinge.androidhangman.repository;
 import android.arch.lifecycle.MutableLiveData;
 import android.util.Log;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
+import java.util.concurrent.CompletableFuture;
+
+import DTO.Guess;
 import DTO.LetterPosition;
 import DTO.StatusReport;
 import se.kth.korlinge.androidhangman.net.Connection;
@@ -27,25 +28,37 @@ public class GameRepository  extends Thread {
         this.word = word;
     }
 
-    /*
-    public StatusReport makeGuess() {
-        return new StatusReport(5,5,0,new ArrayList<LetterPosition>());
+    public void makeGuess(Guess guess) {
+        CompletableFuture.runAsync(() -> {
+            StatusReport reply = conn.makeGuess(guess);
+            updateViewModel(reply);
+        });
     }
-    */
 
-    public void run() {
+    private void updateViewModel(StatusReport statusReport) {
+        score.postValue(statusReport.getScore());
+        remainingAttempts.postValue(statusReport.getRemainingAttempts());
+        formatAndSetWord(statusReport);
+    }
+
+    public void start() {
+        /*
         Log.e("set", "HELLO FROM GAMEREPO RUN THREAD ");
-        int i = 0;
         while (running) {
-            if (i == 0) {
+            if (conn == null) {
                 conn = new Connection();
                 StatusReport report = conn.start();
-                score.postValue(report.getScore());
-                remainingAttempts.postValue(report.getRemainingAttempts());
-                formatAndSetWord(report);
-                i++;
+                updateViewModel(report);
             }
         }
+        */
+        CompletableFuture.runAsync(() -> {
+            if (conn == null) {
+                conn = new Connection();
+                StatusReport report = conn.start();
+                updateViewModel(report);
+            }
+        });
     }
     private void formatAndSetWord(StatusReport statusReport) {
         StringBuilder word = new StringBuilder();

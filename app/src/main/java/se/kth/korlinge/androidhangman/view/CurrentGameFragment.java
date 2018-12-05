@@ -5,17 +5,22 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import se.kth.korlinge.androidhangman.R;
 import se.kth.korlinge.androidhangman.viewmodel.CurrentGameViewModel;
 
-public class CurrentGameFragment extends Fragment {
+public class CurrentGameFragment extends Fragment implements View.OnClickListener {
 
     private CurrentGameViewModel mViewModel;
+    private Button guessButton;
+    private EditText guessInput;
 
     public static CurrentGameFragment newInstance() {
         return new CurrentGameFragment();
@@ -25,6 +30,15 @@ public class CurrentGameFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.e("set", "CLICKED GUESS");
+        if (guessInput.getText().toString().length() < 1) {
+            return;
+        }
+        mViewModel.makeGuess(guessInput.getText().toString());
     }
 
     //on user leaving the fragment, persist changes for when user comes back
@@ -37,7 +51,11 @@ public class CurrentGameFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.current_game_fragment, container, false);
+        View view = inflater.inflate(R.layout.current_game_fragment, container, false);
+        guessButton = (Button) view.findViewById(R.id.guessButton);
+        guessButton.setOnClickListener(this);
+        guessInput = view.findViewById(R.id.guess_input);
+        return view;
     }
 
     @Override
@@ -83,4 +101,5 @@ public class CurrentGameFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
     }
+
 }
