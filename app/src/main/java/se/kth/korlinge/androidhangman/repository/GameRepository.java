@@ -12,24 +12,38 @@ import se.kth.korlinge.androidhangman.net.Connection;
 /**
  * Handles all data fetching calls, as well as threading them to make sure UI does not block.
  */
-public class GameRepository  extends Thread {
+public class GameRepository  {
     private final MutableLiveData<Integer> score;
     private final MutableLiveData<Integer> remainingAttempts;
     private final MutableLiveData<String> word;
     private Connection conn;
 
+    /**
+     * Constructor. Needs to be passed observer objects from the ViewModel to update them on data fetch.
+     * @param score
+     * @param remainingAttempts
+     * @param word
+     */
     public GameRepository(MutableLiveData<Integer> score, MutableLiveData<Integer> remainingAttempts, MutableLiveData<String> word) {
         this.score = score;
         this.remainingAttempts = remainingAttempts;
         this.word = word;
     }
 
+    /**
+     * Send a Guess to the server and then update the view model with the new game status.
+     * @param guess
+     */
     public void makeGuess(Guess guess) {
         CompletableFuture.runAsync(() -> {
             StatusReport reply = conn.makeGuess(guess);
             updateViewModel(reply);
         });
     }
+
+    /**
+     * Start a new game and update the viewmodel with the game status.
+     */
     public void start() {
         CompletableFuture.runAsync(() -> {
             if (conn == null) {

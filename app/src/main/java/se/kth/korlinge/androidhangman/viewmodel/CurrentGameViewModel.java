@@ -17,10 +17,26 @@ public class CurrentGameViewModel extends ViewModel {
     private final  MutableLiveData<String> word = new MutableLiveData<>();
     private GameRepository gameRepository;
 
+    /**
+     * Initiate the viewmodel
+     */
     public void init() {
         Log.e("set", "HELLO FROM VIEWMODEL INIT");
         gameRepository = new GameRepository(getScore(), getRemainingAttempts(), getWord());
         gameRepository.start();
+    }
+    /**
+     * Make a Guess
+     * @param guess
+     */
+    public void makeGuess(String guess) {
+        if (guess.trim().length() == 1) {
+            Guess g = new Guess(guess.charAt(0));
+            gameRepository.makeGuess(g);
+        } else {
+            Guess g = new Guess(guess.trim());
+            gameRepository.makeGuess(g);
+        }
     }
 
     public MutableLiveData<Integer> getScore() {
@@ -34,13 +50,5 @@ public class CurrentGameViewModel extends ViewModel {
     public MutableLiveData<String> getWord() {
         return word;
     }
-    public void makeGuess(String guess) {
-        if (guess.trim().length() == 1) {
-            Guess g = new Guess(guess.charAt(0));
-            gameRepository.makeGuess(g);
-        } else {
-            Guess g = new Guess(guess.trim());
-            gameRepository.makeGuess(g);
-        }
-    }
+
 }

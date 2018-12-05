@@ -15,15 +15,14 @@ import android.widget.TextView;
 import se.kth.korlinge.androidhangman.R;
 import se.kth.korlinge.androidhangman.viewmodel.CurrentGameViewModel;
 
+/**
+ * Main game UI fragment.
+ */
 public class CurrentGameFragment extends Fragment implements View.OnClickListener {
 
     private CurrentGameViewModel mViewModel;
     private Button guessButton;
     private EditText guessInput;
-
-    public static CurrentGameFragment newInstance() {
-        return new CurrentGameFragment();
-    }
 
     //when creating the fragment. initialize essential components of the fragment that are retained when paused or stopped
     @Override
@@ -31,6 +30,10 @@ public class CurrentGameFragment extends Fragment implements View.OnClickListene
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * Called on clicking the "Guess" button. The reason this class implements onclicklistener.
+     * @param v
+     */
     @Override
     public void onClick(View v) {
         if (guessInput.getText().toString().length() < 1) {
@@ -39,12 +42,13 @@ public class CurrentGameFragment extends Fragment implements View.OnClickListene
         mViewModel.makeGuess(guessInput.getText().toString());
     }
 
-    //on user leaving the fragment, persist changes for when user comes back
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
+    /**
+     * On creating the fragment. Set listeners and save components present in the view.
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     //first time fragment is called to draw its ui
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -56,6 +60,10 @@ public class CurrentGameFragment extends Fragment implements View.OnClickListene
         return view;
     }
 
+    /**
+     * When parent activity is created, initiate the viewmodel and set this class to listen to the viewmodel for changes, and on changes happening, update the UI
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -93,11 +101,4 @@ public class CurrentGameFragment extends Fragment implements View.OnClickListene
             scoreView.setText(sb.toString());
         });
     }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-    }
-
 }

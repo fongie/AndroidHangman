@@ -8,8 +8,10 @@ import android.widget.TextView;
 
 import se.kth.korlinge.androidhangman.R;
 
+/**
+ * Starting activity for the application.
+ */
 public class MainActivity extends AppCompatActivity {
-    public static final String EXTRA_MESSAGE = "se.kth.korlinge.androidhangman.MESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +19,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
-    public void sendMessage(View view) {
+    public void goToGame(View view) {
         Intent intent = new Intent(this, GameActivity.class);
-        TextView editText = (TextView) findViewById(R.id.textView4);
-        String message = editText.getText().toString();
-        intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
 }
