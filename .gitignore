@@ -10,3 +10,8 @@
 /captures
 .externalNativeBuild
 /.idea
+*.aux
+*.log
+*.out
+report.pdf
+*.gz

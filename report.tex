@@ -12,18 +12,20 @@
 \usepackage[colorlinks=true,linkcolor=violet]{hyperref}
 \usepackage[figure]{hypcap} %jump to img instead of caption text
 
+\def\code#1{\texttt{#1}}
+
 % Create header and footer
 \headheight 27pt
 \pagestyle{fancyplain}
 \lhead{\footnotesize{Network Programming, ID1212}}
-\chead{\footnotesize{Homework 5: Distributed Applications Using Android}}
+\chead{\footnotesize{Homework 5: Android Programming}}
 \rhead{}
 \lfoot{}
 \cfoot{\thepage\ (\pageref{LastPage})}
 \rfoot{}
 
 % Create title page
-\title{Homework 1: Distributed Applications Using Android}
+\title{Homework 5: Distributed Applications Using Android}
 \subtitle{Network Programming, ID1212}
 \author{Max Körlinge, korlinge@kth.se}
 \date{6 December 2018}
@@ -38,7 +40,7 @@
 \noindent The assignment was to develop a distributed application where the client is an Android device. The focus was on designing, developing, and deploying an Android app using the Android SDK and IDE development tools. The game of Hangman was chosen as the implemented application. The requirements were:
 
 \begin{itemize}
-    \item The programmed must be designed using a layered architecture and object-oriented design principles.
+    \item The program must be designed using a layered architecture and object-oriented design principles.
     \item Some part of the application (for example, the client) must run on Android devices or emulators. There must be network communication from/to the nodes of the application running on Android.
     \item The Android app must have a responsive user interface, which means it must be multithreaded.
     \item The Android app must have a GUI developed using UI Views.
@@ -56,7 +58,7 @@ The program was written in full by the author of this report and both the basic 
 
 \section{Literature Study}
 
-To prepare for this assignment, all video material provided by the course on Android programming was watched. After that, some time was spent reading the official Android documentation's guides to getting started with your first apps and on recommended Android app architecture, and also Firebase's guide to getting started with that. Important information was gathered on how to set up Android Studio and how to code in Android.
+To prepare for this assignment, all video material provided by the course on Android programming was viewed. After that, some time was spent reading the official Android documentation's guides to getting started with your first apps and on recommended Android app architecture, and also Firebase's guide to getting started with that. Important information was gathered on how to set up Android Studio and how to code in Android.
 
 \section{Method}
 
@@ -66,22 +68,22 @@ Development was done from the top down, that is, first, the \code{view} was made
 
 \section{Result}
 
-\noindent The server source code can be found \href{https://github.com/fongie/Hangman/tree/master/hangmanserver}{here} whereas the Android client's source code, which this report is mostly concerned with, can be found at \href{https://github.com/fongie/AndroidHangman}{https://github.com/fongie/AndroidHangman}.
+\noindent The server source code can be found \href{https://github.com/fongie/Hangman/tree/master/hangmanserver}{here} whereas the Android client's source code, which this report is mostly concerned with, can be found at \href{https://github.com/fongie/AndroidHangman}{github.com/fongie/AndroidHangman}.
 
 \begin{itemize}
-    \item To comply with object-oriented design principles, the public interfaces are kept as small as possible, classes adhere to their specific purpose, and the number of dependencies for each class is kept at a minimum. Honestly, though, most methods implemented in the whole app are overridden and thus decided before-hand by the Android API. 
+    \item To comply with object-oriented design principles, the public interfaces are kept as small as possible, classes adhere to their specific purpose, and the number of dependencies for each class is kept at a minimum. Honestly, though, most methods implemented in the whole app are overridden methods and thus their definitions were decided before-hand by the Android API. 
         
         For architecture and layering, the Android \href{https://developer.android.com/jetpack/docs/guide}{guide to app architecture} was loosely followed. There is a \code{view} package containing Activities and Fragment, only dealing with the UI. After that, there is a \code{viewmodel} package, which holds the data currently displayed on the UI. This is accomplished using \code{LiveData} wrappers, which are basically implementations of the observer pattern, provided by Android. The UI observes these data wrappers and \href{https://github.com/fongie/AndroidHangman/blob/master/app/src/main/java/se/kth/korlinge/androidhangman/view/CurrentGameFragment.java#L80}{updates the UI when the data changes}. This way, the \code{view} does not have to contain any logic besides updating the UI.
 
-        The \code{viewmodel} makes use of the \code{repository} layer to fetch its data. This layer, consisting of the \href{https://github.com/fongie/AndroidHangman/blob/master/app/src/main/java/se/kth/korlinge/androidhangman/repository/GameRepository.java}{GameRepository}, is responsible for fetching data. As such, since we fetch data via sockets and cannot block the UI, it also handles threading. To make the connection to the server, the repository calls on a class \code{Connection} in the \code{integration} package which does low-level socket management. The \code{integration} package also contains the service that handles Firebase integration. Lastly, there is a utility package \code{DTO} which contains data transfer objects, necessery for the communication between client and server to work.
+        The \code{viewmodel} makes use of the \code{repository} layer to fetch its data. This layer, consisting of the \href{https://github.com/fongie/AndroidHangman/blob/master/app/src/main/java/se/kth/korlinge/androidhangman/repository/GameRepository.java}{GameRepository}, is responsible for fetching data. As such, since we fetch data via sockets and cannot block the UI, it also handles threading. To make the connection to the server, the repository calls on a class \code{Connection} in the \code{integration} package which does low-level socket management. The \code{integration} package also contains the service that handles Firebase integration. Lastly, there is a utility package \code{DTO} which contains data transfer objects, necessary for the communication between client and server to work.
 
     \item Some part of the application was required to run on Android and there had to be network communication. As you can see in the github repository, the client is an Android project, and as you can see in the \href{https://github.com/fongie/AndroidHangman/blob/master/app/src/main/java/se/kth/korlinge/androidhangman/integration/Connection.java}{Connection} class, there is network communication both from and to the Android client.
 
     \item The Android UI had to be responsive and use threading to accomplish this. All server communication is made in separate threads like \href{https://github.com/fongie/AndroidHangman/blob/master/app/src/main/java/se/kth/korlinge/androidhangman/repository/GameRepository.java#L38}{this} using the \code{CompletableFuture} class which means that the server communication runs in the common thread pool and does not block the UI. The observer pattern provided by the \code{LiveData} wrappers make sure that the \code{viewmodel} is updated when the thread finishes the server call.
 
-    \item The Android app was required to have a GUI using UI Views. The main fragment and game UI is the \href{CurrentGameFragment}{https://github.com/fongie/AndroidHangman/blob/master/app/src/main/java/se/kth/korlinge/androidhangman/view/CurrentGameFragment.java}, and you can see pictures of the GUI in Figure 1.
+    \item The Android app was required to have a GUI using UI Views. The main fragment and game UI is the \href{https://github.com/fongie/AndroidHangman/blob/master/app/src/main/java/se/kth/korlinge/androidhangman/view/CurrentGameFragment.java}{CurrentGameFragment}, and you can see pictures of the GUI in Figure 1.
 
-    \item The server had to be able to handle multiple clients. Refer to Homework 1 to see a full explanation on the server, which is multithreaded, the threading happens \href{https://github.com/fongie/Hangman/blob/master/hangmanserver/src/main/java/net/Server.java#L53}{here}. As a bonus, this server can now handle clients playing from both the Android app and the console program developed in homework 1 at the same time.
+    \item The server had to be able to handle multiple clients. Refer to Homework 1 to see a full explanation on the server, which is multithreaded, the threading happens \href{https://github.com/fongie/Hangman/blob/master/hangmanserver/src/main/java/net/Server.java#L53}{here}. As a bonus, this server can now simultaneously handle clients playing from both the Android app and the console client program developed in homework 1.
         
     \item The user interface had to be informative. See the left and middle pictures in Figure 1, which should show that the UI is informative enough.
 
@@ -89,6 +91,13 @@ Development was done from the top down, that is, first, the \code{view} was made
 
 \end{itemize}
 
+\begin{figure}[h!]
+    \begin{center}
+        \includegraphics[scale=0.45]{ui.png}
+        \caption{A sample output of the user interface}
+        \label{fig:ui}
+    \end{center}
+\end{figure}
 
 \section{Discussion}
 
@@ -100,6 +109,6 @@ Given more time, I could improve the prettiness of the GUI, and use the server t
 
 \section{Comments About the Course}
 
-I spent about 2 hours on the lecture material, and about 12 hours on the assignment, including time spent with the official documentation, and two hours on the report, making 16 hours in total.
+I spent about 2 hours on the lecture material, and about 12 hours on the assignment, including time spent with the official documentation, and 2 hours on the report, making 16 hours in total.
 
 \end{document}
