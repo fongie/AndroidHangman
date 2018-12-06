@@ -3,8 +3,11 @@ package se.kth.korlinge.androidhangman.view;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import se.kth.korlinge.androidhangman.R;
 
@@ -20,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void goToGame(View view) {
+
+        Log.e("token",FirebaseInstanceId.getInstance().getToken());
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }
