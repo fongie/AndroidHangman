@@ -1,6 +1,4 @@
-package se.kth.korlinge.androidhangman.net;
-
-import android.util.Log;
+package se.kth.korlinge.androidhangman.integration;
 
 import DTO.Guess;
 import DTO.StatusReport;

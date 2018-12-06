@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
 import DTO.Guess;
 import DTO.LetterPosition;
 import DTO.StatusReport;
-import se.kth.korlinge.androidhangman.net.Connection;
+import se.kth.korlinge.androidhangman.integration.Connection;
 
 /**
  * Handles all data fetching calls, as well as threading them to make sure UI does not block.

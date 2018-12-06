@@ -22,9 +22,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
     }
 
+    /**
+     * Start the Game activity.
+     * @param view
+     */
     public void goToGame(View view) {
 
+        //get token from firebase to send notifications from firebase console
         Log.e("token",FirebaseInstanceId.getInstance().getToken());
+
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
     }

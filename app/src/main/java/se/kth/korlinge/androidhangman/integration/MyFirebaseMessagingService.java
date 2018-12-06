@@ -1,4 +1,4 @@
-package se.kth.korlinge.androidhangman.notifications;
+package se.kth.korlinge.androidhangman.integration;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -23,9 +23,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private NotificationManager notificationManager;
 
+    /**
+     * Triggers on receiving a message from Firebase
+     * @param remoteMessage
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
