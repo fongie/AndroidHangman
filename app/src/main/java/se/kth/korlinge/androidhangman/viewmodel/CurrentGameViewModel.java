@@ -2,7 +2,6 @@ package se.kth.korlinge.androidhangman.viewmodel;
 
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
-import android.util.Log;
 
 import DTO.Guess;
 import se.kth.korlinge.androidhangman.repository.GameRepository;
@@ -21,7 +20,6 @@ public class CurrentGameViewModel extends ViewModel {
      * Initiate the viewmodel
      */
     public void init() {
-        Log.e("set", "HELLO FROM VIEWMODEL INIT");
         gameRepository = new GameRepository(getScore(), getRemainingAttempts(), getWord());
         gameRepository.start();
     }
